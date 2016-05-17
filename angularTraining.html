@@ -1,0 +1,66 @@
+<!--point this html to a module by using ng-app-->
+<html ng-app="demoApp">
+<head>
+	<title>Using AngularJS</title>
+</head>
+	
+	<!--call controller-->
+	<body>
+		<div>
+		  <div ng-view></div>
+    </div>
+        
+    <!--need this to run angular.js-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <!--make a controller-->
+    <script>
+        //create a module
+        var demoApp=angular.module('demoApp',[]);
+
+        demoApp.config(function($routeProvider){
+            $routeProvider
+            .when('/view1',{
+                controller: 'SimpleController',
+                templateUrl: 'Partials/View1.html'//these should be file under foler Partials
+            })
+            .when('/view2',{
+                controller: 'SimpleController',
+                templateUrl: 'Partials/View2.html'
+            })
+            .otherwise({redirectTo:'/view1'});
+        });
+
+        //create a factory
+        demoApp.factory('simpleFactory',function(){
+            var customers = [{
+                name:'Joe',city:'nowhere'
+            }];
+            var factory ={};
+            factory.getCustomers = function(){
+                return customers;
+            };
+            factory.postCustomer = function(customer){
+
+            };
+            return factory;
+        });
+        //declare a controller of a module using this 
+        //(name,function of the controller)
+        demoApp.controller('SimpleController',function($scope,simpleFactory){
+            $scope.customers=[];
+            init();
+            function init(){
+                $scope.customers = simpleFactory.getCustomers();
+            }
+            $scope.customer= [];  
+            $scope.addCustomer = function(){
+                $scope.customers.push({name: $scope.newCustomer.name, city: $scope.newCustomer.city})
+            }
+        });
+    </script>
+	</body>
+    <!--Note: 
+    1/ whatever comes with the "$" is the default. Not customized. Keep it as it is
+    2/ 
+-->
+</html>
